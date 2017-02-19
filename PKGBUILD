@@ -26,7 +26,6 @@ makedepends=("${MINGW_PACKAGE_PREFIX}-${_realname}"
              "${MINGW_PACKAGE_PREFIX}-headers"
              "${MINGW_PACKAGE_PREFIX}-gmp"
              "${MINGW_PACKAGE_PREFIX}-isl"
-             "${MINGW_PACKAGE_PREFIX}-libiconv"
              "${MINGW_PACKAGE_PREFIX}-mpc"
              "${MINGW_PACKAGE_PREFIX}-mpfr"
              "${MINGW_PACKAGE_PREFIX}-windows-default-manifest"
@@ -47,14 +46,11 @@ source=("https://ftp.gnu.org/gnu/gcc/${_realname}-${pkgver}/${_realname}-${pkgve
         "0009-gcc-make-xmmintrin-header-cplusplus-compatible-depre.patch"
         "0010-Fix-using-large-PCH.patch"
         "0011-Enable-shared-gnat-implib.patch"
-        "0012-MinGW-w64-Enable-libitm.patch"
         "0013-MinGW-w64-Enable-shared-gnat.patch"
         "0014-gcc-6-branch-clone_function_name_1-Retain-any-stdcall-suffix.patch"
         "0015-Force-linking-to-libgcc_s_dw2-1.dll-deprecated.patch"
         "0016-disable-weak-refs-in-libstdc++.patch"
-        "0017-diagnostic-color.patch"
-        "0100-gcc-4.8-libstdc++export.patch"
-        "0110-gcc-4.7-stdthreads.patch")
+        "0017-diagnostic-color.patch")
 sha256sums=('f06ae7f3f790fbf0f018f6d40e844451e6bc3b7bc96e128e63b09825c1f8b29f'
             '49a5e264e611de7f2388f01ba649ec22cf3ae1cde3ba45082a7d72294c2f4fd7'
             '83e9c6f76f728ae3e2f2eabb588b0d6cea7a3eda03cd5e77aed9d613143b7348'
@@ -67,21 +63,18 @@ sha256sums=('f06ae7f3f790fbf0f018f6d40e844451e6bc3b7bc96e128e63b09825c1f8b29f'
             '0eaee0e1201f4f85ea20756432a9d51531e0e859f6f121276684e2b63b2ee315'
             '0decbbebda7ceac91da5d3dec9b7330f406a4358fa150560f08ff6f54739035f'
             '8faff8e503a617f283270f411399a8bcacda3ab62b4072dedf117e108af4844a'
-            'fc34b667c94df53c96a1f39c7e89a737c64e59df19169b02182dde84b6bec39e'
             'bab73267116024d0b0d2a9dcb78a0ad839bb6a232f1ebbee7ed8fd54c8d71087'
             '60a58ed41389691a68ef4b7d47a0328df4d28d26e6c680a6b06b31191481ca65'
             '262c6fb0f6c9951d69e4c2dcc27949aa8f2cca8e672faf66740a7dbba4a4cd2c'
             '09f27e0dae8d962f2a46a33a9891f2d14303629bb40f91ed8c5824c90da653a9'
-            'af291b64812ed6d1d1d357c9fb5fe5a520154aa072f342a72dc9a190732952e0'
-            '21191b4fd57ce5f230fcc97b4d9ae31bdc387d7c7c8e39436aa7e4268d278d3d'
-            '5e0fc1437ce0b357e78d440692e3a30a7905a5f360a67928a95b14ec8d45365b')
+            'af291b64812ed6d1d1d357c9fb5fe5a520154aa072f342a72dc9a190732952e0')
 
 _threads="posix"
 
 prepare() {
   cd ${srcdir}/${_realname}-${pkgver}
   rm -rf intl/canonicalize.c intl/canonicalize.h intl/relocatex.c intl/relocatex.h || true
-  patch -p1 -i ${srcdir}/0001-gcc-6-branch-gfortran-incorrect-reading-of-values-fr.patch || true
+  patch -p1 -i ${srcdir}/0001-gcc-5-branch-gfortran-incorrect-reading-of-values-fr.patch || true
   patch -p1 -i ${srcdir}/0002-Relocate-libintl.patch
   patch -p1 -i ${srcdir}/0003-Windows-Follow-Posix-dir-exists-semantics-more-close.patch
   patch -p1 -i ${srcdir}/0004-Windows-Use-not-in-progpath-and-leave-case-as-is.patch
@@ -137,7 +130,7 @@ build() {
     --with-arch=${_arch} \
     --with-tune=generic \
     --enable-languages=c,lto,c++,objc,obj-c++,fortran,ada \
-    --enable-shared --enable-static \
+    --disable-shared --enable-static \
     --enable-libatomic \
     --enable-threads=${_threads} \
     --enable-graphite \
